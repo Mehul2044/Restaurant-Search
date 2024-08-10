@@ -26,6 +26,7 @@ const getRestaurants = async (req, res) => {
     try {
         const count = await Restaurant.countDocuments();
         const restaurants = await Restaurant.find()
+            .select("_id name restaurantId city cuisines currency averageCostForTwo priceRange ratingColor ratingText aggregateRating")
             .limit(pageSize)
             .skip(pageSize * (page - 1));
 
