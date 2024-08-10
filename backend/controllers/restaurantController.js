@@ -4,6 +4,9 @@ const getRestaurantById = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
         if (restaurant) {
+            restaurant.name = restaurant.name.replace(/�/g, '');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
+            restaurant.city = restaurant.city.replace(/�/g, '');
             res.json(restaurant);
         } else {
             res.status(404).json({message: 'Restaurant not found'});
@@ -20,13 +23,21 @@ const getRestaurants = async (req, res) => {
     if (pageSize > 100) pageSize = 100;
 
     try {
-        const count = await Restaurant.countDocuments({});
-        const restaurants = await Restaurant.find({})
+        const count = await Restaurant.countDocuments();
+        const restaurants = await Restaurant.find()
             .limit(pageSize)
             .skip(pageSize * (page - 1));
+
+        const filteredRestaurants = restaurants.map(restaurant => {
+            restaurant.name = restaurant.name.replace(/�/g, '');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
+            restaurant.city = restaurant.city.replace(/�/g, '');
+            return restaurant;
+        });
+
         res.json({
             count,
-            restaurants,
+            restaurants: filteredRestaurants,
             page,
             pages: Math.ceil(count / pageSize),
         });
@@ -67,12 +78,20 @@ const searchRestaurants = async (req, res) => {
         const restaurants = await Restaurant.find(query)
             .skip(skip)
             .limit(parseInt(pageSize.toString()));
+
+        const filteredRestaurants = restaurants.map(restaurant => {
+            restaurant.name = restaurant.name.replace(/�/g, '');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
+            restaurant.city = restaurant.city.replace(/�/g, '');
+            return restaurant;
+        });
+
         const total = await Restaurant.countDocuments(query);
         res.json({
             total,
             page: parseInt(page.toString()),
             totalPages: Math.ceil(total / pageSize),
-            results: restaurants
+            results: filteredRestaurants
         });
     } catch (error) {
         res.status(500).json({message: error.message});

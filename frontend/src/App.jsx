@@ -1,7 +1,16 @@
+import Routing from "./utils/Routing.jsx";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+
+const theme = createTheme();
+
 function App() {
 
-  return <>
-      <h1>Hello</h1>
+    return <>
+        <ThemeProvider theme={theme}>
+            <CssBaseline>
+                <Routing/>
+            </CssBaseline>
+        </ThemeProvider>
     </>;
 }
 

@@ -38,7 +38,7 @@ const loadData = async () => {
                     switchToOrderMenu: row['Switch to order menu'] === 'Yes',
                     priceRange: Number(row['Price range']),
                     aggregateRating: Math.max(1, Number(row['Aggregate rating'])),
-                    ratingColor: row['Rating color'],
+                    ratingColor: row['Rating color'].replace(/\s+/g, '').toLowerCase(),
                     ratingText: row['Rating text'],
                     votes: Number(row['Votes']),
                 });

@@ -1,0 +1,66 @@
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.price-range-1 {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+
+.price-range-1:hover {
+    background: linear-gradient(135deg, #fda085 0%, #f6d365 100%);
+}
+
+.price-range-2 {
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+.price-range-2:hover {
+    background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+}
+
+.price-range-3 {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+}
+
+.price-range-3:hover {
+    background: linear-gradient(135deg, #96e6a1 0%, #d4fc79 100%);
+}
+
+.price-range-4 {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.price-range-4:hover {
+    background: linear-gradient(135deg, #8fd3f4 0%, #84fab0 100%);
+}
+
+.price-range-5 {
+    background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%);
+}
+
+.price-range-5:hover {
+    background: linear-gradient(135deg, #d57eeb 0%, #fccb90 100%);
+}
+
+.indexContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.indexItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 40px;
+    margin: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
