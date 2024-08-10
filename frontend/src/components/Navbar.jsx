@@ -18,7 +18,7 @@ function Navbar() {
                                     backgroundColor: "rgba(255, 255, 255, 0.2)"
                                 }
                             }}>
-                        Home
+                        Restaurants
                     </Button>
                     <Button color="inherit" component={Link} to="/search-location" replace={true}
                             sx={{

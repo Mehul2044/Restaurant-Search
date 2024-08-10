@@ -4,9 +4,10 @@ const getRestaurantById = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
         if (restaurant) {
-            restaurant.name = restaurant.name.replace(/�/g, '');
-            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
-            restaurant.city = restaurant.city.replace(/�/g, '');
+            restaurant.name = restaurant.name.replace(/�/g, 'i');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, 'i'));
+            restaurant.city = restaurant.city.replace(/�/g, 'i');
+            restaurant.address = restaurant.address.replace(/�/g, 'i');
             res.json(restaurant);
         } else {
             res.status(404).json({message: 'Restaurant not found'});
@@ -29,9 +30,9 @@ const getRestaurants = async (req, res) => {
             .skip(pageSize * (page - 1));
 
         const filteredRestaurants = restaurants.map(restaurant => {
-            restaurant.name = restaurant.name.replace(/�/g, '');
-            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
-            restaurant.city = restaurant.city.replace(/�/g, '');
+            restaurant.name = restaurant.name.replace(/�/g, 'i');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, 'i'));
+            restaurant.city = restaurant.city.replace(/�/g, 'i');
             return restaurant;
         });
 
@@ -80,9 +81,9 @@ const searchRestaurants = async (req, res) => {
             .limit(parseInt(pageSize.toString()));
 
         const filteredRestaurants = restaurants.map(restaurant => {
-            restaurant.name = restaurant.name.replace(/�/g, '');
-            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, ''));
-            restaurant.city = restaurant.city.replace(/�/g, '');
+            restaurant.name = restaurant.name.replace(/�/g, 'i');
+            restaurant.cuisines = restaurant.cuisines.map(cuisine => cuisine.replace(/�/g, 'i'));
+            restaurant.city = restaurant.city.replace(/�/g, 'i');
             return restaurant;
         });
 
