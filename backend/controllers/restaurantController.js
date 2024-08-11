@@ -75,7 +75,9 @@ const searchRestaurants = async (req, res) => {
     if (minCost) query.averageCostForTwo = {$gte: minCost};
     if (maxCost) query.averageCostForTwo = {$lte: maxCost};
     if (name) query.name = {$regex: name, $options: 'i'};
-    if (priceRange) query.priceRange = priceRange;
+    if (priceRange) {
+        if (priceRange.toString() !== "5") query.priceRange = priceRange;
+    }
 
     try {
         const skip = (page - 1) * pageSize;

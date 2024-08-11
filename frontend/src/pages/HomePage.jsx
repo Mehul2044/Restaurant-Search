@@ -2,10 +2,10 @@ import {useEffect, useState} from "react";
 import {Grid, CircularProgress, Box, Typography} from "@mui/material";
 
 import {backendUrl} from "../utils/constants.js";
-
 import RestaurantCard from "../components/RestaurantCard.jsx";
 import PriceIndex from "../components/PriceIndex.jsx";
 import PaginationComponent from "../components/Pagination.jsx";
+import SearchBar from "../components/SearchBar.jsx";
 
 function HomePage() {
     const [restaurants, setRestaurants] = useState([]);
@@ -13,35 +13,39 @@ function HomePage() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [priceRange, setPriceRange] = useState(5);
+    const [country, setCountry] = useState('');
+    const [cuisine, setCuisine] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                let url;
-                if (priceRange.toString() === "5") {
-                    url = `${backendUrl}/?page=${page}&limit=8`;
-                } else {
-                    url = `${backendUrl}/search?page=${page}&limit=8&priceRange=${priceRange}`;
-                }
+                let url = `${backendUrl}/search?page=${page}&limit=8&priceRange=${priceRange}`;
+                if (country) url += `&country=${country}`;
+                if (cuisine) url += `&cuisine=${cuisine}`;
+                if (searchQuery) url += `&name=${searchQuery}`;
+
                 const response = await fetch(url);
                 const data = await response.json();
                 setRestaurants(data.restaurants || data.results);
                 setTotalPages(data.pages || data.totalPages);
-                console.log(url);
             } catch (error) {
                 console.error("Error fetching restaurants:", error);
             } finally {
                 setLoading(false);
             }
-        }
+        };
         setLoading(true);
         fetchRestaurants().then();
-    }, [page, priceRange]);
+    }, [page, priceRange, country, cuisine, searchQuery]);
 
     return (
         <>
             <Box sx={{p: 4}}>
                 <Typography variant="h4" sx={{mb: 4}} align="center">Zomato Restaurant Lists</Typography>
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} country={country}
+                           setCountry={setCountry} cuisine={cuisine} setCuisine={setCuisine} setPage={setPage}
+                           isCountry={true} isCuisine={true}/>
                 {loading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" height="51vh">
                         <CircularProgress/>

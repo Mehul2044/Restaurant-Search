@@ -10,25 +10,26 @@ import {backendUrl} from "../utils/constants.js";
 import RestaurantCard from "../components/RestaurantCard.jsx";
 import PriceIndex from "../components/PriceIndex.jsx";
 import PaginationComponent from "../components/Pagination.jsx";
+import SearchBar from "../components/SearchBar.jsx";
 
 function LocationSearch() {
-    const [latitude, setLatitude] = useState(51.505);
-    const [longitude, setLongitude] = useState(-0.09);
+    const [latitude, setLatitude] = useState(28.6273928);
+    const [longitude, setLongitude] = useState(77.1716954);
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [priceRange, setPriceRange] = useState(5);
+    const [country, setCountry] = useState('');
+    const [cuisine, setCuisine] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                let url;
-                if (priceRange.toString() === "5") {
-                    url = `${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8`;
-                } else {
-                    url = `${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8&priceRange=${priceRange}`;
-                }
+                let url = `${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8&priceRange=${priceRange}`;
+                if (cuisine) url += `&cuisine=${cuisine}`;
+                if (searchQuery) url += `&name=${searchQuery}`;
                 const response = await fetch(url);
                 if (response.ok) {
                     const data = await response.json();
@@ -43,7 +44,7 @@ function LocationSearch() {
         };
         setLoading(true);
         fetchRestaurants().then(() => setLoading(false));
-    }, [latitude, longitude, page, priceRange]);
+    }, [latitude, longitude, page, priceRange, cuisine, searchQuery]);
 
 
     const handleMapCreated = (map) => {
@@ -93,6 +94,9 @@ function LocationSearch() {
                 )}
             </MapContainer>
             <Box sx={{p: 4}}>
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} country={country}
+                           setCountry={setCountry} cuisine={cuisine} setCuisine={setCuisine} setPage={setPage}
+                           isCountry={false} isCuisine={true}/>
                 {loading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" height="51vh">
                         <CircularProgress/>

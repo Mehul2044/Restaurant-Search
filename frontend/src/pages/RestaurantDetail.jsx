@@ -167,9 +167,9 @@ function RestaurantDetail() {
                                         color: "#FF9800",
                                     }}/>
                                 <strong style={{color: "#FF9800"}}>
-                                    Country Code:
+                                    Country:
                                 </strong>{" "}
-                                {restaurant.countryCode}
+                                {restaurant.country}
                             </Typography>
                             <Typography variant="h6" gutterBottom>
                                 <RestaurantMenuIcon

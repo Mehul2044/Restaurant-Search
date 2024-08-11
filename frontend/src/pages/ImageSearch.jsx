@@ -7,6 +7,7 @@ import {backendUrl} from "../utils/constants.js";
 import RestaurantCard from "../components/RestaurantCard.jsx";
 import PriceIndex from "../components/PriceIndex.jsx";
 import PaginationComponent from "../components/Pagination.jsx";
+import SearchBar from "../components/SearchBar.jsx";
 
 function ImageSearch() {
     const [cuisine, setCuisine] = useState("French");
@@ -17,16 +18,16 @@ function ImageSearch() {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [priceRange, setPriceRange] = useState(5);
+    const [country, setCountry] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                let url;
-                if (priceRange.toString() === "5") {
-                    url = `${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}`;
-                } else {
-                    url = `${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}&priceRange=${priceRange}`;
-                }
+                let url = `${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}&priceRange=${priceRange}`;
+                if (country) url += `&country=${country}`;
+                if (searchQuery) url += `&name=${searchQuery}`;
+
                 const response = await fetch(url);
                 const data = await response.json();
                 setRestaurants(data.results);
@@ -37,7 +38,7 @@ function ImageSearch() {
         }
         setLoading(true);
         fetchRestaurants().then(() => setLoading(false));
-    }, [cuisine, page, priceRange]);
+    }, [cuisine, page, priceRange, searchQuery, country]);
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         onDrop: (acceptedFiles) => {
@@ -108,7 +109,7 @@ function ImageSearch() {
                                 {image ? (
                                     <>
                                         {image.name}
-                                        <br />
+                                        <br/>
                                         Drag new Image Here...
                                     </>
                                 ) : isDragActive ? (
@@ -151,6 +152,8 @@ function ImageSearch() {
                 </Box>
             </form>
             <Box sx={{p: 4}}>
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} country={country}
+                           setCountry={setCountry} setPage={setPage} isCountry={true} isCuisine={false}/>
                 {loading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" height="51vh">
                         <CircularProgress/>
