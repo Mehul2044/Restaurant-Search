@@ -1,3 +1,4 @@
+const {GoogleGenerativeAI} = require("@google/generative-ai")
 const Restaurant = require('../models/Restaurant');
 
 const getRestaurantById = async (req, res) => {
@@ -101,7 +102,33 @@ const searchRestaurants = async (req, res) => {
 };
 
 const imageSearch = async (req, res) => {
-    res.json({message: 'Image search not implemented yet'});
+    try {
+        if (!req.file) {
+            return res.status(400).json({message: "No file uploaded"});
+        }
+
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({model: "gemini-1.5-flash"});
+
+        const imageBuffer = req.file.buffer.toString("base64");
+        const prompt = "Based on the image, please identify the cuisine in a single word. If you cannot determine the cuisine, respond with 'idk'. Do not include full stops and spaces and other characters in the response.";
+        const image = {
+            inlineData: {
+                data: imageBuffer,
+                mimeType: req.file.mimetype
+            }
+        };
+        const result = await model.generateContent([prompt, image]);
+        const responseText = result.response.text();
+        if (responseText.startsWith("idk")) {
+            res.json({message: "Unable to determine the cuisine."});
+        } else {
+            res.json({cuisine: responseText, message: "Success"});
+        }
+    } catch (error) {
+        console.error("Error during image search:", error);
+        res.status(500).json({message: error.message});
+    }
 };
 
 module.exports = {

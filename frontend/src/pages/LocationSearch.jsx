@@ -86,7 +86,6 @@ function LocationSearch() {
                 )}
             </MapContainer>
             <Box sx={{p: 4}}>
-                <Typography variant="h4" sx={{mb: 4}} align="center">Zomato Restaurant Lists</Typography>
                 {loading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" height="51vh">
                         <CircularProgress/>

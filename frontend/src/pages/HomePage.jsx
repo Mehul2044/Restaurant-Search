@@ -25,7 +25,7 @@ function HomePage() {
             } finally {
                 setLoading(false);
             }
-        };
+        }
         setLoading(true);
         fetchRestaurants().then();
     }, [page]);
