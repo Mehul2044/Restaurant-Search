@@ -98,7 +98,17 @@ function ImageSearch() {
                             }}>
                             <input {...getInputProps()} />
                             <Typography variant="body1" color="textSecondary">
-                                {isDragActive ? "Drop the files here ..." : "Drag 'n' drop an image here, or click to select one"}
+                                {image ? (
+                                    <>
+                                        {image.name}
+                                        <br />
+                                        Drag new Image Here...
+                                    </>
+                                ) : isDragActive ? (
+                                    "Drop the files here ..."
+                                ) : (
+                                    "Drag 'n' drop an image here, or click to select one"
+                                )}
                             </Typography>
                         </Box>
                     </Grid>
