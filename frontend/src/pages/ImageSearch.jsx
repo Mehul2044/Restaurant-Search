@@ -16,11 +16,18 @@ function ImageSearch() {
     const [restaurants, setRestaurants] = useState([]);
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [priceRange, setPriceRange] = useState(5);
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                const response = await fetch(`${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}`);
+                let url;
+                if (priceRange.toString() === "5") {
+                    url = `${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}`;
+                } else {
+                    url = `${backendUrl}/search?page=${page}&limit=8&cuisine=${cuisine}&priceRange=${priceRange}`;
+                }
+                const response = await fetch(url);
                 const data = await response.json();
                 setRestaurants(data.results);
                 setTotalPages(data.totalPages);
@@ -30,7 +37,7 @@ function ImageSearch() {
         }
         setLoading(true);
         fetchRestaurants().then(() => setLoading(false));
-    }, [cuisine, page]);
+    }, [cuisine, page, priceRange]);
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         onDrop: (acceptedFiles) => {
@@ -169,7 +176,7 @@ function ImageSearch() {
                     </>
                 )}
             </Box>
-            {restaurants.length !== 0 && <PriceIndex/>}
+            {<PriceIndex setPriceRange={setPriceRange} setPage={setPage}/>}
             <PaginationComponent totalPages={totalPages} page={page} setPage={setPage}/>
             <div style={{height: "3rem"}}></div>
         </>

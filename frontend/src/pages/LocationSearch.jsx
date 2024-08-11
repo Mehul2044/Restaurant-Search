@@ -18,11 +18,18 @@ function LocationSearch() {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [priceRange, setPriceRange] = useState(5);
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                const response = await fetch(`${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8`);
+                let url;
+                if (priceRange.toString() === "5") {
+                    url = `${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8`;
+                } else {
+                    url = `${backendUrl}/search?latitude=${latitude}&longitude=${longitude}&page=${page}&limit=8&priceRange=${priceRange}`;
+                }
+                const response = await fetch(url);
                 if (response.ok) {
                     const data = await response.json();
                     setTotalPages(data.totalPages);
@@ -36,7 +43,7 @@ function LocationSearch() {
         };
         setLoading(true);
         fetchRestaurants().then(() => setLoading(false));
-    }, [latitude, longitude, page]);
+    }, [latitude, longitude, page, priceRange]);
 
 
     const handleMapCreated = (map) => {
@@ -100,7 +107,7 @@ function LocationSearch() {
                     </Grid>
                 )}
             </Box>
-            <PriceIndex/>
+            <PriceIndex setPriceRange={setPriceRange} setPage={setPage}/>
             <PaginationComponent totalPages={totalPages} page={page} setPage={setPage}/>
         </>
     );

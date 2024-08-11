@@ -12,14 +12,22 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [priceRange, setPriceRange] = useState(5);
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                const response = await fetch(`${backendUrl}/?page=${page}&limit=8`);
+                let url;
+                if (priceRange.toString() === "5") {
+                    url = `${backendUrl}/?page=${page}&limit=8`;
+                } else {
+                    url = `${backendUrl}/search?page=${page}&limit=8&priceRange=${priceRange}`;
+                }
+                const response = await fetch(url);
                 const data = await response.json();
-                setRestaurants(data.restaurants);
-                setTotalPages(data.pages);
+                setRestaurants(data.restaurants || data.results);
+                setTotalPages(data.pages || data.totalPages);
+                console.log(url);
             } catch (error) {
                 console.error("Error fetching restaurants:", error);
             } finally {
@@ -28,7 +36,7 @@ function HomePage() {
         }
         setLoading(true);
         fetchRestaurants().then();
-    }, [page]);
+    }, [page, priceRange]);
 
     return (
         <>
@@ -48,7 +56,7 @@ function HomePage() {
                     </Grid>
                 )}
             </Box>
-            <PriceIndex/>
+            <PriceIndex setPriceRange={setPriceRange} setPage={setPage}/>
             <PaginationComponent totalPages={totalPages} page={page} setPage={setPage}/>
         </>
     );

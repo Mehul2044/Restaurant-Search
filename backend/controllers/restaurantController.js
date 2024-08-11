@@ -51,10 +51,10 @@ const getRestaurants = async (req, res) => {
 
 const searchRestaurants = async (req, res) => {
     let pageSize = Number(req.query.limit) || 10;
-    const {latitude, longitude, cuisine, country, minCost, maxCost, name, page = 1} = req.query;
+    const {latitude, longitude, cuisine, country, minCost, maxCost, priceRange, name, page = 1} = req.query;
     const query = {};
 
-    if (!latitude && !longitude && !cuisine && !country && !minCost && !maxCost && !name) {
+    if (!latitude && !longitude && !cuisine && !country && !minCost && !maxCost && !name && !priceRange) {
         return res.status(400).json({message: 'At least one search parameter must be provided.'});
     }
 
@@ -75,6 +75,7 @@ const searchRestaurants = async (req, res) => {
     if (minCost) query.averageCostForTwo = {$gte: minCost};
     if (maxCost) query.averageCostForTwo = {$lte: maxCost};
     if (name) query.name = {$regex: name, $options: 'i'};
+    if (priceRange) query.priceRange = priceRange;
 
     try {
         const skip = (page - 1) * pageSize;
