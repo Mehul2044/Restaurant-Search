@@ -65,7 +65,7 @@ application includes a web API service and a web-based user interface.
 6. **Start the frontend server**:
     ```bash
     cd frontend
-    npm start
+    npm run dev
     ```
 
 ## API Endpoints
